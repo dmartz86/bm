@@ -1,14 +1,25 @@
-function userConstructor(data) {
-  this.attributes.name = data.name;
-}
+((w) => {
+  const GeneralRegion = Marionette.Region.extend({el: '.general-region'});
+  const UserRegion = Marionette.Region.extend({el: '.users-region'});
+  const UserModel = new Backbone.Model({});
+  const UserCollection = new Backbone.Collection({});
+  const UserTemplate = 'User Template';
 
-const User = Backbone.Model.extend({
-  attributes: {
-    name: '',
-    age: 0
-  },
-  constructor: userConstructor
-});
+  const UserView = new Marionette.ItemView({
+    model : UserModel,
+    template : UserTemplate,
+    collection : UserCollection
+  });
 
-const daniel = new User({name: 'Daniel', age: 40});
+  const App = new Marionette.Application({
+    regions: {
+      general: GeneralRegion,
+      users: UserRegion
+    }
+  });
 
+  const Channel = Backbone.Wreqr.radio.channel('walkie-talkie');
+  const Router = Marionette.AppRouter.extend({appRoutes: {'inventory': ''}});
+
+  App.start();
+})(window);
