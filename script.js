@@ -1,3 +1,5 @@
+'use strict';
+
 ((w) => {
   const GeneralRegion = Marionette.Region.extend({el: '.general-region'});
   const UserRegion = Marionette.Region.extend({el: '.users-region'});
