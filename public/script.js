@@ -38,5 +38,5 @@
     initialize: function() {}
   });
   
-  $(document).ready( () => App.start());
+  App.start();
 })(Backbone, Marionette);
