@@ -1,0 +1,26 @@
+{
+  "name": "bm",
+  "version": "1.0.0",
+  "description": "Backbone and Marionette",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dmartz86/bm.git"
+  },
+  "keywords": [
+    "backbone"
+  ],
+  "author": "Daniel Martinez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dmartz86/bm/issues"
+  },
+  "homepage": "https://github.com/dmartz86/bm#readme",
+  "dependencies": {
+    "ejs": "^2.4.1",
+    "express": "^4.13.4"
+  }
+}
