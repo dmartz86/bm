@@ -1,6 +1,6 @@
 'use strict';
 
-((B, M) => {
+((B, M, H) => {
   const ENTER = 13;
   const Task = B.Model.extend({
     url: '/api/tasks',
@@ -9,6 +9,11 @@
         return 'Task name can\'t be empty';
       }
     }
+  });
+
+  const Library = Backbone.Collection.extend({
+    model: Task,
+    url: '/api/tasks'
   });
 
   const ValidationBehavior = M.Behavior.extend({
@@ -27,6 +32,7 @@
   App.addRegions({
     main: '#page'
   });
+
   const AppLayoutView = M.LayoutView.extend({
     template: '#app-template',
     regions: {
@@ -35,11 +41,22 @@
       statsRegion: '#stats'
     },
     onBeforeShow: function () {
-      this.editorRegion.show(new EditorView({ model: new Task()}));
-      this.itemsRegion.show(new ItemsView());
-      this.statsRegion.show(new StatsView());
+      const itemsTemplate = H.compile($('#template-items').html());
+      new Library().fetch().then(items => {
+        const data = {};
+        data.title = 'Task Viewer';
+        data.items = items;
+
+        this.itemsRegion.show(new ItemsView({
+          collection: data,
+          template: itemsTemplate(data)
+        }));
+        this.editorRegion.show(new EditorView({ model: new Task() }));
+        this.statsRegion.show(new StatsView());
+      });
     }
   });
+
   App.addInitializer(function () {
     App.main.show(new AppLayoutView());
   });
@@ -62,9 +79,10 @@
     },
     save: function () {
       this.model.set('name', $(this.ui.name).val());
-      this.model.set('completed', false);
-      this.model.set('createdAt', new Date().getTime());
       this.model.validate(this.model.attributes);
+      if (!this.model.isValid()) {
+        console.log(this.model.validationError);
+      }
       this.model.save();
     },
     clear: function () {
@@ -77,11 +95,21 @@
       }
     }
   });
+
   const ItemsView = M.ItemView.extend({
-    template: '#template-items',
-    events: {},
-    initialize: function () { }
+    events: {
+      'click .toogle': 'toggle'
+    },
+    ui: {
+      'name': '#task-name'
+    },
+    toggle: function (event) {
+      console.log($(event.target).attr('data-id'));
+    },
+    initialize: function () { },
+    serializeData: function () {}
   });
+
   const StatsView = M.ItemView.extend({
     template: '#template-stats',
     events: {},
@@ -89,4 +117,4 @@
   });
 
   App.start();
-})(Backbone, Marionette);
+})(Backbone, Marionette, Handlebars);

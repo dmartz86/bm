@@ -4,3 +4,8 @@ i {
   top: -6px;
   position: relative;
 }
+
+.btn-icon {
+  padding-left: 10px;
+  padding-right: 20px;
+}

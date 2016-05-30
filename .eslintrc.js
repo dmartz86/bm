@@ -8,6 +8,7 @@ module.exports = {
         "_": true,
         "Backbone": true,
         "Marionette": true,
+        "Handlebars": true,
         "__dirname": true,
         "require": true
     },
