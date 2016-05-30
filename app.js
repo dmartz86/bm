@@ -7,9 +7,9 @@
   const server = require('http').createServer(app);
   const bodyParser = require('body-parser');
   const db = { tasks: [
-    {id: 0, name: 'Clean'},
-    {id: 1, name: 'Remove', completed: true},
-    {id: 2, name: 'Delete'}
+    {id: 0, name: 'Clean the directory'},
+    {id: 1, name: 'Remove the blockers', completed: true},
+    {id: 2, name: 'Delete spam'}
   ]};
 
   app.use(express.static(path.join(__dirname, '/public')));
