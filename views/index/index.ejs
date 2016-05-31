@@ -42,32 +42,38 @@
 </script>
 
 <script type="text/x-handlebars-template" id="template-items">
-  <div class="col-md-4">
-    <fieldset>
-      <legend>{{title}} [{{items.length}}]</legend>
-        {{#each items}}
-          <div class="form-group">
-            <div class="input-group">
-              <span class="input-group-btn">
-                <a class="btn btn-success btn-icon toogle" type="button" data-id="{{id}}">
-                  {{#if completed}}
-                    <i class="fa fa-check fa-2x" data-id="{{id}}"></i>
-                  {{^}}
-                    <i class="fa square-o fa-2x" data-id="{{id}}"></i>
-                  {{/if}}
-                </a>
-              </span>
-              <label type="text" class="form-control">{{name}}</label>
-              <span class="input-group-btn">
-                <button class="btn btn-danger btn-icon" type="button">
-                  <i class="fa fa-trash fa-2x"></i>
-                </button>
-              </span>
-            </div>
+  <div>
+    <div class="col-md-4">
+      <fieldset>
+        <legend>{{title}} [{{items.length}}]</legend>
+          <div class="pre-scrollable">
+            {{#each items}}
+              <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-btn">                
+                    {{#if completed}}
+                      <a class="btn btn-success btn-icon toogle-task" data-id="{{id}}">
+                        <i class="fa fa-check fa-2x" data-id="{{id}}"></i>
+                      </a>
+                    {{^}}
+                      <a class="btn btn-info btn-icon toogle-task" data-id="{{id}}">
+                        <i class="fa square-o fa-2x" data-id="{{id}}"></i>
+                      </a>
+                    {{/if}}
+                  </span>
+                  <label type="text" class="form-control">{{name}}</label>
+                  <span class="input-group-btn">
+                    <a class="btn btn-danger btn-icon remove-task" data-id="{{id}}">
+                      <i class="fa fa-trash fa-2x" data-id="{{id}}"></i>
+                    </a>
+                  </span>
+                </div>
+              </div>
+            {{/each}}
           </div>
-        {{/each}}
-      </legend>
-    </fieldset>
+        </legend>
+      </fieldset>
+    </div>
   </div>
 </script>
 
@@ -75,10 +81,24 @@
   <div class="col-md-4">
     <fieldset>
       <legend>Statistics</legend>
-      <ul class="breadcrumb">
-        <li><a href="#">Level 1</a></li>
-        <li class="active">Level 2</li>
-      </ul>
+      <div class="col-md-12 text-center">
+        <div class="col-md-6 panel panel-success">
+          <div class="panel-heading">
+            <h3 class="panel-title">Done</h3>
+          </div>
+          <div class="panel-body">
+            <span class="stat-count">3/4</span>
+          </div>
+        </div>
+        <div class="col-md-6 panel panel-info">
+          <div class="panel-heading">
+            <h3 class="panel-title">Pending</h3>
+          </div>
+          <div class="panel-body">
+            <span class="stat-count">3/4</span>
+          </div>
+        </div>
+      </div>
     </fieldset>
   </div>
 </script>

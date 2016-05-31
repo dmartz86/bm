@@ -2,18 +2,22 @@
 
 ((B, M, H) => {
   const ENTER = 13;
+  const API_URL = '/api/tasks';
   const Task = B.Model.extend({
-    url: '/api/tasks',
+    urlRoot: API_URL,
     validate: function (attributes) {
       if (!attributes.name) {
         return 'Task name can\'t be empty';
       }
+    },
+    toggle: function () {
+      this.attributes.completed = !this.attributes.completed;
     }
   });
 
-  const Library = Backbone.Collection.extend({
+  const TaskCollection = Backbone.Collection.extend({
     model: Task,
-    url: '/api/tasks'
+    url: API_URL
   });
 
   const ValidationBehavior = M.Behavior.extend({
@@ -28,8 +32,8 @@
     }
   });
 
-  const App = new M.Application();
-  App.addRegions({
+  const app = new M.Application();
+  app.addRegions({
     main: '#page'
   });
 
@@ -41,24 +45,14 @@
       statsRegion: '#stats'
     },
     onBeforeShow: function () {
-      const itemsTemplate = H.compile($('#template-items').html());
-      new Library().fetch().then(items => {
-        const data = {};
-        data.title = 'Task Viewer';
-        data.items = items;
-
-        this.itemsRegion.show(new ItemsView({
-          collection: data,
-          template: itemsTemplate(data)
-        }));
-        this.editorRegion.show(new EditorView({ model: new Task() }));
-        this.statsRegion.show(new StatsView());
-      });
+      this.editorRegion.show(new EditorView({ model: new Task() }));
+      this.statsRegion.show(new StatsView());
+      controller.loadItems(this);
     }
   });
 
-  App.addInitializer(function () {
-    App.main.show(new AppLayoutView());
+  app.addInitializer(function () {
+    app.main.show(new AppLayoutView());
   });
 
   const EditorView = M.ItemView.extend({
@@ -78,12 +72,17 @@
       }
     },
     save: function () {
+      const self = this;
       this.model.set('name', $(this.ui.name).val());
       this.model.validate(this.model.attributes);
       if (!this.model.isValid()) {
         console.log(this.model.validationError);
       }
-      this.model.save();
+      this.model.save().then(function () {
+        $(self.ui.name).val('');
+        self.model = new Task({name: ''});
+        controller.loadItems();
+      });
     },
     clear: function () {
       $(this.ui.name).val('');
@@ -98,16 +97,30 @@
 
   const ItemsView = M.ItemView.extend({
     events: {
-      'click .toogle': 'toggle'
-    },
-    ui: {
-      'name': '#task-name'
+      'click .toogle-task': 'toggle',
+      'click .remove-task': 'drop'
     },
     toggle: function (event) {
-      console.log($(event.target).attr('data-id'));
+      const id = $(event.target).attr('data-id');
+      const task = controller.itemsList.get(id);
+      task.toggle();
+      task.save().then(function () {
+        controller.loadItems();
+      });
+    },
+    drop: function () {
+      const id = $(event.target).attr('data-id');
+      const task = controller.itemsList.get(id);
+      if (!task) {
+        return controller.loadItems();
+      }
+
+      task.destroy().then(function () {
+        controller.loadItems();
+      });
     },
     initialize: function () { },
-    serializeData: function () {}
+    serializeData: function () { }
   });
 
   const StatsView = M.ItemView.extend({
@@ -116,5 +129,31 @@
     initialize: function () { }
   });
 
-  App.start();
+  const Controller = Marionette.Object.extend({
+    initialize: function () {
+      this.itemsTemplate = H.compile($('#template-items').html());
+      this.itemsList = new TaskCollection();
+    },
+    getItem: function (id) {
+      return this.itemsList.get(id);
+    },
+    loadItems: function (appref) {
+      const self = this;
+      self.app = self.app || appref;
+      self.itemsList.fetch().then(items => {
+        const data = {};
+        data.title = 'Task Viewer';
+        data.items = items;
+
+        self.app.itemsRegion.show(new ItemsView({
+          collection: data,
+          template: self.itemsTemplate(data)
+        }));
+      });
+    }
+  });
+
+  const controller = new Controller();
+
+  app.start();
 })(Backbone, Marionette, Handlebars);
