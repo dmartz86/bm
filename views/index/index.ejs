@@ -16,7 +16,7 @@
   <div id="stats"></div>
 </script>
 
-<script type="text/template" id="template-editor">
+<script type="text/template" id="editor-template">
   <div class="col-md-4">
     <div class="form-horizontal">
       <fieldset>
@@ -41,7 +41,7 @@
   </div>
 </script>
 
-<script type="text/x-handlebars-template" id="template-items">
+<script type="text/x-handlebars-template" id="items-template">
   <div>
     <div class="col-md-4">
       <fieldset>
@@ -77,29 +77,31 @@
   </div>
 </script>
 
-<script type="text/template" id="template-stats">
-  <div class="col-md-4">
-    <fieldset>
-      <legend>Statistics</legend>
-      <div class="col-md-12 text-center">
-        <div class="col-md-6 panel panel-success">
-          <div class="panel-heading">
-            <h3 class="panel-title">Done</h3>
+<script type="text/x-handlebars-template" id="stats-template">
+  <div>
+    <div class="col-md-4">
+      <fieldset>
+        <legend>Statistics</legend>
+        <div class="row text-center">
+          <div class="col-md-12 panel panel-success">
+            <div class="panel-heading">
+              <h3 class="panel-title">Done</h3>
+            </div>
+            <div class="panel-body">
+              <span class="stat-count">3/4</span>
+            </div>
           </div>
-          <div class="panel-body">
-            <span class="stat-count">3/4</span>
+          <div class="col-md-12 panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title">Pending</h3>
+            </div>
+            <div class="panel-body">
+              <span class="stat-count">3/4</span>
+            </div>
           </div>
         </div>
-        <div class="col-md-6 panel panel-info">
-          <div class="panel-heading">
-            <h3 class="panel-title">Pending</h3>
-          </div>
-          <div class="panel-body">
-            <span class="stat-count">3/4</span>
-          </div>
-        </div>
-      </div>
-    </fieldset>
+      </fieldset>
+    </div>
   </div>
 </script>
 

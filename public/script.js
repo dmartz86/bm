@@ -56,7 +56,7 @@
   });
 
   const EditorView = M.ItemView.extend({
-    template: '#template-editor',
+    template: '#editor-template',
     events: {
       'keydown #task-name': 'create',
       'click #submit': 'create',
@@ -124,14 +124,14 @@
   });
 
   const StatsView = M.ItemView.extend({
-    template: '#template-stats',
+    template: '#stats-template',
     events: {},
     initialize: function () { }
   });
 
   const Controller = Marionette.Object.extend({
     initialize: function () {
-      this.itemsTemplate = H.compile($('#template-items').html());
+      this.itemsTemplate = H.compile($('#items-template').html());
       this.itemsList = new TaskCollection();
     },
     getItem: function (id) {
