@@ -15,9 +15,18 @@
     }
   });
 
+  const Stat = B.Model.extend({
+    urlRoot: '/api/stats'
+  });
+
   const TaskCollection = Backbone.Collection.extend({
     model: Task,
     url: API_URL
+  });
+
+  const StatsCollection = Backbone.Collection.extend({
+    model: Stat,
+    url: '/api/stats'
   });
 
   const ValidationBehavior = M.Behavior.extend({
@@ -46,8 +55,8 @@
     },
     onBeforeShow: function () {
       this.editorRegion.show(new EditorView({ model: new Task() }));
-      this.statsRegion.show(new StatsView());
       controller.loadItems(this);
+      controller.loadStats(this);
     }
   });
 
@@ -80,7 +89,7 @@
       }
       this.model.save().then(function () {
         $(self.ui.name).val('');
-        self.model = new Task({name: ''});
+        self.model = new Task({ name: '' });
         controller.loadItems();
       });
     },
@@ -124,15 +133,17 @@
   });
 
   const StatsView = M.ItemView.extend({
-    template: '#stats-template',
     events: {},
-    initialize: function () { }
+    initialize: function () { },
+    serializeData: function () { }
   });
 
   const Controller = Marionette.Object.extend({
     initialize: function () {
       this.itemsTemplate = H.compile($('#items-template').html());
+      this.statsTemplate = H.compile($('#stats-template').html());
       this.itemsList = new TaskCollection();
+      this.statsList = new StatsCollection();
     },
     getItem: function (id) {
       return this.itemsList.get(id);
@@ -150,6 +161,23 @@
           template: self.itemsTemplate(data)
         }));
       });
+      self.loadStats();
+    },
+    loadStats: function (appref) {
+      const self = this;
+      self.app = self.app || appref;
+      self.statsList.fetch().then(data => {
+        self.app.statsRegion.show(new StatsView({
+          collection: self.calc(data),
+          template: self.statsTemplate(data)
+        }));
+      });
+    },
+    calc(data) {
+      data.at = new Date(data.ts);
+      data.donePerc = Math.round(data.done / data.total * 10000) / 100;
+      data.pendingPerc = Math.round(data.pending / data.total * 10000) / 100;
+      return data;
     }
   });
 

@@ -85,21 +85,22 @@
         <div class="row text-center">
           <div class="col-md-12 panel panel-success">
             <div class="panel-heading">
-              <h3 class="panel-title">Done</h3>
+              <h3 class="panel-title">Done ({{donePerc}} %)</h3>
             </div>
             <div class="panel-body">
-              <span class="stat-count">3/4</span>
+              <span class="stat-count">{{done}}/{{total}}</span>
             </div>
           </div>
           <div class="col-md-12 panel panel-info">
             <div class="panel-heading">
-              <h3 class="panel-title">Pending</h3>
+              <h3 class="panel-title">Pending({{pendingPerc}} %)</h3>
             </div>
             <div class="panel-body">
-              <span class="stat-count">3/4</span>
+              <span class="stat-count">{{pending}}/{{total}}</span>
             </div>
           </div>
         </div>
+        <span>Updated at: {{at}}</span>
       </fieldset>
     </div>
   </div>
