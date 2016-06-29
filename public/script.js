@@ -175,9 +175,22 @@
     },
     calc(data) {
       data.at = new Date(data.ts);
-      data.donePerc = Math.round(data.done / data.total * 10000) / 100;
-      data.pendingPerc = Math.round(data.pending / data.total * 10000) / 100;
+      data.donePerc = data.done ? Math.round(data.done / data.total * 10000) / 100 : 0;
+      this.addStatus(data, 'doneStyle', data.donePerc);
       return data;
+    },
+    addStatus(data, style, mark) {
+      data[style] = 'progress-bar-';
+
+      if(mark >= 90){
+        data[style] += 'success';
+      } else if (mark >= 60) {
+        data[style] += 'info';
+      } else if (mark >30) {
+        data[style] += 'warning';
+      } else {
+        data[style] += 'danger';
+      }
     }
   });
 
