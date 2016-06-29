@@ -11,98 +11,96 @@
 </div>
 
 <script type="text/template" id="app-template">
-  <div id="editor"></div>
-  <div id="items"></div>
-  <div id="stats"></div>
+  <div class="col-md-8">
+    <div id="editor"></div>
+    <div id="items"></div>
+  </div>
+  <div class="col-md-4">
+    <div id="stats"></div>
+  </div>
 </script>
 
 <script type="text/template" id="editor-template">
-  <div class="col-md-4">
-    <div class="form-horizontal">
-      <fieldset>
-        <legend>Task Creator/Editor</legend>
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-btn">
-              <button id="clear" class="btn btn-warning btn-icon" type="button">
-                <i class="fa fa-eraser fa-2x"></i>
-              </button>
-            </span>
-            <input id="task-name" type="text" class="form-control" placeholder="Write a task name" autofocus="">
-            <span class="input-group-btn">
-              <button id="submit" class="btn btn-primary btn-icon" type="button">
-                <i class="fa fa-save fa-2x"></i>
-              </button>
-            </span>
-          </div>
+  <div>
+    <fieldset>
+      <legend>Task Creator/Editor</legend>
+      <div class="form-group">
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button id="clear" class="btn btn-warning btn-icon" type="button">
+              <i class="fa fa-eraser fa-2x"></i>
+            </button>
+          </span>
+          <input id="task-name" type="text" class="form-control" placeholder="Write a task name" autofocus="">
+          <span class="input-group-btn">
+            <button id="submit" class="btn btn-primary btn-icon" type="button">
+              <i class="fa fa-save fa-2x"></i>
+            </button>
+          </span>
         </div>
-      </fieldset>
-    </div>
+      </div>
+    </fieldset>
   </div>
 </script>
 
 <script type="text/x-handlebars-template" id="items-template">
   <div>
-    <div class="col-md-4">
-      <fieldset>
-        <legend>{{title}} [{{items.length}}]</legend>
-          <div class="pre-scrollable">
-            {{#each items}}
-              <div class="form-group">
-                <div class="input-group">
-                  <span class="input-group-btn">                
-                    {{#if completed}}
-                      <a class="btn btn-success btn-icon toogle-task" data-id="{{id}}">
-                        <i class="fa fa-check fa-2x" data-id="{{id}}"></i>
-                      </a>
-                    {{^}}
-                      <a class="btn btn-info btn-icon toogle-task" data-id="{{id}}">
-                        <i class="fa square-o fa-2x" data-id="{{id}}"></i>
-                      </a>
-                    {{/if}}
-                  </span>
-                  <label type="text" class="form-control">{{name}}</label>
-                  <span class="input-group-btn">
-                    <a class="btn btn-danger btn-icon remove-task" data-id="{{id}}">
-                      <i class="fa fa-trash fa-2x" data-id="{{id}}"></i>
+    <fieldset>
+      <legend>{{title}} [{{items.length}}]</legend>
+        <div class="pre-scrollable">
+          {{#each items}}
+            <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-btn">                
+                  {{#if completed}}
+                    <a class="btn btn-success btn-icon toogle-task" data-id="{{id}}">
+                      <i class="fa fa-check fa-2x" data-id="{{id}}"></i>
                     </a>
-                  </span>
-                </div>
+                  {{^}}
+                    <a class="btn btn-info btn-icon toogle-task" data-id="{{id}}">
+                      <i class="fa square-o fa-2x" data-id="{{id}}"></i>
+                    </a>
+                  {{/if}}
+                </span>
+                <label type="text" class="form-control">{{name}}</label>
+                <span class="input-group-btn">
+                  <a class="btn btn-danger btn-icon remove-task" data-id="{{id}}">
+                    <i class="fa fa-trash fa-2x" data-id="{{id}}"></i>
+                  </a>
+                </span>
               </div>
-            {{/each}}
-          </div>
-        </legend>
-      </fieldset>
-    </div>
+            </div>
+          {{/each}}
+        </div>
+      </legend>
+    </fieldset>
   </div>
 </script>
 
 <script type="text/x-handlebars-template" id="stats-template">
   <div>
-    <div class="col-md-4">
-      <fieldset>
-        <legend>Statistics</legend>
-        <div class="row text-center">
-          <div class="col-md-12 panel panel-success">
-            <div class="panel-heading">
-              <h3 class="panel-title">Done ({{donePerc}} %)</h3>
-            </div>
-            <div class="panel-body">
-              <span class="stat-count">{{done}}/{{total}}</span>
-            </div>
+    <fieldset>
+      <legend>Statistics</legend>
+      <div class="row text-center">
+        <div class="col-md-12 panel panel-success">
+          <div class="panel-heading">
+            <h3 class="panel-title">Done ({{donePerc}} %)</h3>
           </div>
-          <div class="col-md-12 panel panel-info">
-            <div class="panel-heading">
-              <h3 class="panel-title">Pending({{pendingPerc}} %)</h3>
-            </div>
-            <div class="panel-body">
-              <span class="stat-count">{{pending}}/{{total}}</span>
-            </div>
+          <div class="panel-body">
+            <span class="stat-count">{{done}}/{{total}}</span>
           </div>
         </div>
-        <span>Updated at: {{at}}</span>
-      </fieldset>
-    </div>
+        <div class="col-md-12 panel panel-info">
+          <div class="panel-heading">
+            <h3 class="panel-title">Pending({{pendingPerc}} %)</h3>
+          </div>
+          <div class="panel-body">
+            <span class="stat-count">{{pending}}/{{total}}</span>
+          </div>
+        </div>
+      </div>
+      <span>Updated at: {{at}}</span>
+    </fieldset>
   </div>
 </script>
 
