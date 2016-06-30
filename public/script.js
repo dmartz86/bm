@@ -19,6 +19,10 @@
     urlRoot: '/api/stats'
   });
 
+  const Filter = B.Model.extend({
+    urlRoot: '/api/groups'
+  });
+
   const TaskCollection = Backbone.Collection.extend({
     model: Task,
     url: API_URL
@@ -27,6 +31,11 @@
   const StatsCollection = Backbone.Collection.extend({
     model: Stat,
     url: '/api/stats'
+  });
+
+  const FiltersCollection = Backbone.Collection.extend({
+    model: Filter,
+    url: '/api/groups'
   });
 
   const ValidationBehavior = M.Behavior.extend({
@@ -51,12 +60,14 @@
     regions: {
       editorRegion: '#editor',
       itemsRegion: '#items',
-      statsRegion: '#stats'
+      statsRegion: '#stats',
+      filtersRegion: '#filters'
     },
     onBeforeShow: function () {
       this.editorRegion.show(new EditorView({ model: new Task() }));
       controller.loadItems(this);
       controller.loadStats(this);
+      controller.loadFilters(this);
     }
   });
 
@@ -138,12 +149,20 @@
     serializeData: function () { }
   });
 
+  const FiltersView = M.ItemView.extend({
+    events: {},
+    initialize: function () { },
+    serializeData: function () { }
+  });
+
   const Controller = Marionette.Object.extend({
     initialize: function () {
       this.itemsTemplate = H.compile($('#items-template').html());
       this.statsTemplate = H.compile($('#stats-template').html());
+      this.filtersTemplate = H.compile($('#filters-template').html());
       this.itemsList = new TaskCollection();
       this.statsList = new StatsCollection();
+      this.filtersList = new FiltersCollection();
     },
     getItem: function (id) {
       return this.itemsList.get(id);
@@ -162,6 +181,7 @@
         }));
       });
       self.loadStats();
+      self.loadFilters();
     },
     loadStats: function (appref) {
       const self = this;
@@ -170,6 +190,17 @@
         self.app.statsRegion.show(new StatsView({
           collection: self.calc(data),
           template: self.statsTemplate(data)
+        }));
+      });
+    },
+    loadFilters: function (appref) {
+      const self = this;
+      self.app = self.app || appref;
+      self.filtersList.fetch().then(data => { 
+        console.log(data);
+        self.app.filtersRegion.show(new FiltersView({
+          collection: data,
+          template: self.filtersTemplate(data)
         }));
       });
     },

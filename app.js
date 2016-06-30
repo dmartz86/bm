@@ -14,9 +14,10 @@
       { id: 2, name: 'Basic ToDo', completed: true },
       { id: 3, name: 'Add error messages', completed: false }
     ],
-    groups: {
-      '#editor': [0] 
-    }
+    groups: [
+      { name: '#editor', target: [0, 2] },
+      { name: '#concept', target: [1, 3] }
+    ]
   };
 
   app.use(express.static(path.join(__dirname, '/public')));
@@ -31,7 +32,7 @@
   app.post('/api/tasks', (req, res) => res.json(saveTask(req.body)));
   app.delete('/api/tasks/:id', (req, res) => res.json(deleteTask(req.params.id)));
   app.get('/api/stats', (req, res) => res.json(doStats()));
-  app.get('/api/audit', (req, res) => res.json(db));
+  app.get('/api/groups', (req, res) => res.json(db.groups));
 
   server.listen(app.get('port'), function () {
     console.log('BM server ready on port', app.get('port'));
@@ -85,7 +86,14 @@
   function findGroups(task) {
     const hashtags = task.name.match(TAGGING);
     if (hashtags) {
-      hashtags.forEach(tag => db.groups[tag] ? db.groups[tag].push(task.id) : db.groups[tag] = [task.id]);
+      hashtags.forEach(tag => {
+        const filter = db.groups.filter(group => !!group).find(group => group.name === tag);
+        if (filter) {
+          filter.target.push(task.id);
+        } else {
+          db.groups.push({ name: tag, target: [task.id] });
+        }
+      });
     }
   }
 
