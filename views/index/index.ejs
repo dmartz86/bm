@@ -125,22 +125,25 @@
   <div> 
     <legend>Filters</legend>
     <div class="row">
-        <div class="col-md-12 panel panel-success">
-          <div class="row panel-heading text-center">
-            <h3 class="panel-title">Filter Groups ({{this.length}})</h3>
+      <div class="pre-scrollable">
+        {{#each this}}
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-btn">
+                <button class="btn btn-warning btn-icon" type="button">
+                  <i class="fa fa-unlock fa-2x"></i>
+                </button>
+              </span>
+              <label type="text" class="form-control">{{name}}</label>
+              <span class="input-group-btn">
+                <button class="btn btn-primary btn-icon" type="button">
+                  {{target.length}}
+                </button>
+              </span>
+            </div>
           </div>
-          <div class="panel-body">
-            <ul class="list-group pre-scrollable">
-              {{#each this}}
-              <li class="list-group-item">
-                <span class="badge">{{target.length}}</span>
-                {{name}} <span class="badge"></span>
-              </li>
-              {{/each}}
-            </ul>
-          </div>
-        </div>
-      </div>
+        {{/each}}
+      </div>        
     </div>
   </div>
 </script>
